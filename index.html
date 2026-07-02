@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Divyang Desai — Copywriter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #14110f;
+    --fg: #f3efe9;
+    --muted: #9c948b;
+    --line: #35302b;
+    --accent: #f3efe9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 1600px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 80px); }
+
+  /* HERO */
+  .hero { padding: clamp(48px, 12vh, 150px) 0 clamp(24px, 5vh, 56px); }
+  .hero h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    font-size: clamp(64px, 15.5vw, 260px);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* INFO GRID */
+  .info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    padding: clamp(28px, 5vh, 56px) 0;
+    font-size: clamp(15px, 1.15vw, 19px);
+  }
+  .info .col-r { text-align: right; }
+  .info .lbl { color: var(--muted); margin-bottom: 6px; }
+  .info a { color: var(--fg); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .25s; }
+  .info a:hover { border-color: var(--fg); }
+  .info .stack { display: flex; flex-direction: column; gap: 2px; }
+
+  /* SELECTED WORK */
+  .section-head {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    padding: clamp(40px, 9vh, 110px) 0 clamp(28px, 5vh, 60px);
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(26px, 3.2vw, 46px);
+    font-weight: 500;
+  }
+  .section-head .arrow { font-size: 0.7em; opacity: .8; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 2.4vw, 40px);
+    padding-bottom: clamp(60px, 10vh, 140px);
+  }
+  .card { cursor: pointer; }
+  .card .frame {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #201b17;
+    border: 1px solid var(--line);
+  }
+  .card .frame img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s cubic-bezier(.2,.7,.2,1), filter .4s;
+    filter: saturate(.95);
+  }
+  .card:hover .frame img { transform: scale(1.04); filter: saturate(1.1); }
+  .card .overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: clamp(16px, 2vw, 28px);
+    background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%);
+    opacity: 0; transition: opacity .35s;
+  }
+  .card:hover .overlay { opacity: 1; }
+  .card .overlay .view { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .card .meta { display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; gap: 16px; }
+  .card .meta h3 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(20px, 2vw, 30px); }
+  .card .meta .cat { color: var(--muted); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .card .meta .count { color: var(--muted); font-size: 13px; }
+
+  /* FOOTER */
+  footer { padding: clamp(40px, 8vh, 90px) 0 clamp(48px, 8vh, 90px); }
+  .foot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-top: clamp(24px, 4vh, 40px); font-size: clamp(15px, 1.15vw, 19px); }
+  .foot-grid .col-r { text-align: right; }
+  .foot-grid .lbl { color: var(--muted); margin-bottom: 6px; }
+  .foot-grid a { color: var(--fg); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .25s; }
+  .foot-grid a:hover { border-color: var(--fg); }
+
+  /* LIGHTBOX */
+  .lb { position: fixed; inset: 0; background: rgba(10,8,7,.97); z-index: 50; display: none; flex-direction: column; }
+  .lb.open { display: flex; }
+  .lb-top { display: flex; align-items: center; justify-content: space-between; padding: clamp(18px, 3vw, 34px) clamp(20px, 5vw, 60px); flex-shrink: 0; }
+  .lb-top .t { font-family: "Cormorant Garamond", serif; font-size: clamp(22px, 3vw, 40px); font-weight: 500; }
+  .lb-top .t small { display:block; font-family:"Inter",sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+  .lb-close { background: none; border: 1px solid var(--line); color: var(--fg); width: 46px; height: 46px; border-radius: 50%; font-size: 20px; cursor: pointer; transition: background .25s, border-color .25s; flex-shrink:0; }
+  .lb-close:hover { background: var(--fg); color: var(--bg); }
+  .lb-body { flex: 1; overflow-y: auto; padding: 0 clamp(20px, 5vw, 60px) clamp(40px, 8vh, 80px); }
+  .lb-gallery { display: grid; gap: clamp(16px, 2.5vw, 40px); max-width: 1100px; margin: 0 auto; }
+  .lb-gallery.wide { grid-template-columns: 1fr 1fr; }
+  .lb-gallery img { width: 100%; height: auto; display: block; border: 1px solid var(--line); background:#201b17; }
+  .lb-links { max-width: 1100px; margin: 24px auto 0; display:flex; gap:18px; flex-wrap:wrap; }
+  .lb-links a { color: var(--muted); font-size: 13px; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px; transition:color .25s,border-color .25s; }
+  .lb-links a:hover { color: var(--fg); border-color: var(--fg); }
+
+  @media (max-width: 760px) {
+    .info, .foot-grid { grid-template-columns: 1fr; gap: 22px; }
+    .info .col-r, .foot-grid .col-r { text-align: left; }
+    .grid { grid-template-columns: 1fr; }
+    .lb-gallery.wide { grid-template-columns: 1fr; }
+    .hero h1 { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Divyang&nbsp;Desai</h1>
+  </section>
+  <hr class="rule" />
+
+  <section class="info">
+    <div class="col-l">
+      <div class="lbl">Name</div>
+      <div>Divyang Desai</div>
+    </div>
+    <div class="col-m">
+      <div class="lbl">Role</div>
+      <div>Copywriter</div>
+    </div>
+    <div class="col-r">
+      <div class="lbl">Focus</div>
+      <div class="stack">
+        <span>Direct-Response Ads</span>
+        <span>Long-Form &amp; Essays</span>
+        <span>Newsletters</span>
+      </div>
+    </div>
+  </section>
+  <hr class="rule" />
+
+  <div class="section-head">Selected Work <span class="arrow">&#8600;</span></div>
+
+  <section class="grid" id="grid"></section>
+</main>
+
+<footer class="wrap">
+  <hr class="rule" />
+  <div class="foot-grid">
+    <div class="col-l">
+      <div class="lbl">Based in</div>
+      <div>Toronto, Canada</div>
+    </div>
+    <div class="col-m">
+      <div class="lbl">Status</div>
+      <div>Open to opportunities</div>
+    </div>
+    <div class="col-r">
+      <div class="lbl">Contact</div>
+      <div><a href="mailto:divyangdesai99@gmail.com">divyangdesai99@gmail.com</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" aria-hidden="true">
+  <div class="lb-top">
+    <div class="t" id="lb-title">Title<small id="lb-cat">Category</small></div>
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="lb-body">
+    <div class="lb-gallery" id="lb-gallery"></div>
+    <div class="lb-links" id="lb-links"></div>
+  </div>
+</div>
+
+<script>
+  const enc = p => p.split('/').map(encodeURIComponent).join('/');
+
+  const projects = [
+    {
+      title: "Carry Cast",
+      cat: "Static Ads · Direct Response",
+      cover: "static-ads/carrycast/Traditional vs Carry Cast.png",
+      wide: true,
+      images: [
+        "static-ads/carrycast/Durable Carry Cast.png",
+        "static-ads/carrycast/Flights and Carry Cast.png",
+        "static-ads/carrycast/Traditional vs Carry Cast.png",
+        "static-ads/carrycast/Trout vs Carry Cast.png",
+        "static-ads/carrycast/carrycast-02.png"
+      ],
+      links: []
+    },
+    {
+      title: "Long-Form Essay",
+      cat: "Medium · Editorial",
+      cover: "covers/long-form.jpg",
+      wide: false,
+      images: [ "medium/medium-article-01-page1.jpg" ],
+      links: [ { label: "Read full article (PDF)", href: "medium/medium-article-01.pdf" } ]
+    },
+    {
+      title: "The Newsletter",
+      cat: "Substack · Personal Essays",
+      cover: "covers/newsletter.png",
+      wide: false,
+      images: Array.from({length:10}, (_,i)=>`newsletter/newsletter${String(i+1).padStart(2,'0')}.jpg`),
+      links: [
+        { label: "Issue 01 (PDF)", href: "newsletter/newsletter01.pdf" },
+        { label: "Issue 02 (PDF)", href: "newsletter/newsletter02.pdf" }
+      ]
+    },
+    {
+      title: "30 Atomic Essays",
+      cat: "Ship30for30 · Short-Form",
+      cover: "covers/atomic-essays.png",
+      wide: true,
+      images: Array.from({length:30}, (_,i)=>`ship30 atomic essays/day${String(i+1).padStart(2,'0')}.jpg`),
+      links: []
+    }
+  ];
+
+  const grid = document.getElementById('grid');
+  projects.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="frame">
+        <img src="${enc(p.cover)}" alt="${p.title}" loading="lazy" />
+        <div class="overlay"><span></span><span class="view">View →</span></div>
+      </div>`;
+    card.addEventListener('click', () => openLb(idx));
+    grid.appendChild(card);
+  });
+
+  const lb = document.getElementById('lb');
+  const lbGallery = document.getElementById('lb-gallery');
+  const lbLinks = document.getElementById('lb-links');
+  const lbTitle = document.getElementById('lb-title');
+  const lbCat = document.getElementById('lb-cat');
+
+  function openLb(idx) {
+    const p = projects[idx];
+    lbTitle.childNodes[0].nodeValue = p.title;
+    lbCat.textContent = p.cat;
+    lbGallery.className = 'lb-gallery' + (p.wide ? ' wide' : '');
+    lbGallery.innerHTML = p.images.map(src => `<img src="${enc(src)}" alt="${p.title}" loading="lazy" />`).join('');
+    lbLinks.innerHTML = (p.links||[]).map(l => `<a href="${enc(l.href)}" target="_blank" rel="noopener">${l.label}</a>`).join('');
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.lb-body').scrollTop = 0;
+  }
+  function closeLb() {
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+</script>
+</body>
+</html>
