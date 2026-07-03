@@ -4,6 +4,23 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Divyang Desai — Copywriter</title>
+<meta name="description" content="Copywriter portfolio of Divyang Desai — direct-response static ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<meta name="theme-color" content="#14110f" />
+<link rel="canonical" href="https://divyanz.github.io/portfolio/" />
+
+<!-- Social sharing -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Divyang Desai — Copywriter" />
+<meta property="og:description" content="Direct-response ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<meta property="og:url" content="https://divyanz.github.io/portfolio/" />
+<meta property="og:image" content="https://divyanz.github.io/portfolio/covers/carry-cast.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Divyang Desai — Copywriter" />
+<meta name="twitter:description" content="Direct-response ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<meta name="twitter:image" content="https://divyanz.github.io/portfolio/covers/carry-cast.png" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314110f'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23f3efe9' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -28,6 +45,8 @@
   }
   .wrap { max-width: 1600px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 80px); }
 
+  :focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+
   /* HERO */
   .hero { padding: clamp(48px, 12vh, 150px) 0 clamp(24px, 5vh, 56px); }
   .hero h1 {
@@ -37,6 +56,13 @@
     line-height: 0.9;
     letter-spacing: -0.01em;
     white-space: nowrap;
+  }
+  .hero-sub {
+    margin-top: clamp(18px, 3vh, 32px);
+    color: var(--muted);
+    font-size: clamp(14px, 1.2vw, 18px);
+    letter-spacing: .02em;
+    max-width: 60ch;
   }
 
   .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
@@ -68,10 +94,14 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(16px, 2.4vw, 40px);
+    gap: clamp(24px, 3vw, 48px) clamp(16px, 2.4vw, 40px);
     padding-bottom: clamp(60px, 10vh, 140px);
   }
-  .card { cursor: pointer; }
+  .card {
+    display: block; width: 100%; text-align: left;
+    background: none; border: 0; padding: 0;
+    color: inherit; font: inherit; cursor: pointer;
+  }
   .card .frame {
     position: relative;
     aspect-ratio: 4 / 3;
@@ -85,17 +115,21 @@
     filter: saturate(.95);
   }
   .card:hover .frame img { transform: scale(1.04); filter: saturate(1.1); }
+  .card:focus-visible { outline: none; }
+  .card:focus-visible .frame { outline: 2px solid var(--fg); outline-offset: 4px; }
   .card .overlay {
     position: absolute; inset: 0;
-    display: flex; align-items: flex-end; justify-content: space-between;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
     padding: clamp(16px, 2vw, 28px);
     background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%);
     opacity: 0; transition: opacity .35s;
   }
-  .card:hover .overlay { opacity: 1; }
-  .card .overlay .view { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .card:hover .overlay, .card:focus-visible .overlay { opacity: 1; }
+  .card .overlay .ocat, .card .overlay .view { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .card .overlay .ocat { color: rgba(243,239,233,.75); }
   .card .meta { display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; gap: 16px; }
   .card .meta h3 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(20px, 2vw, 30px); }
+  .card .meta .side { text-align: right; display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
   .card .meta .cat { color: var(--muted); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
   .card .meta .count { color: var(--muted); font-size: 13px; }
 
@@ -129,6 +163,16 @@
     .grid { grid-template-columns: 1fr; }
     .lb-gallery.wide { grid-template-columns: 1fr; }
     .hero h1 { white-space: normal; }
+    .card .meta { flex-direction: column; gap: 4px; }
+    .card .meta .side { text-align: left; flex-direction: row; gap: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: .001ms !important;
+      animation-duration: .001ms !important;
+    }
+    html { scroll-behavior: auto; }
   }
 </style>
 </head>
@@ -137,6 +181,7 @@
 <main class="wrap">
   <section class="hero">
     <h1>Divyang&nbsp;Desai</h1>
+    <p class="hero-sub">Copywriter — direct-response ads, long-form essays &amp; newsletters.</p>
   </section>
   <hr class="rule" />
 
@@ -160,9 +205,9 @@
   </section>
   <hr class="rule" />
 
-  <div class="section-head">Selected Work <span class="arrow">&#8600;</span></div>
+  <h2 class="section-head">Selected Work <span class="arrow">&#8600;</span></h2>
 
-  <section class="grid" id="grid"></section>
+  <section class="grid" id="grid" aria-label="Selected work"></section>
 </main>
 
 <footer class="wrap">
@@ -184,10 +229,10 @@
 </footer>
 
 <!-- LIGHTBOX -->
-<div class="lb" id="lb" aria-hidden="true">
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lb-title" aria-hidden="true">
   <div class="lb-top">
     <div class="t" id="lb-title">Title<small id="lb-cat">Category</small></div>
-    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-close" id="lb-close" aria-label="Close gallery">&times;</button>
   </div>
   <div class="lb-body">
     <div class="lb-gallery" id="lb-gallery"></div>
@@ -202,6 +247,7 @@
     {
       title: "Carry Cast",
       cat: "Static Ads · Direct Response",
+      count: "5 ads",
       cover: "static-ads/carrycast/Traditional vs Carry Cast.png",
       wide: true,
       images: [
@@ -216,6 +262,7 @@
     {
       title: "Long-Form Essay",
       cat: "Medium · Editorial",
+      count: "Essay + PDF",
       cover: "covers/long-form.jpg",
       wide: false,
       images: [ "medium/medium-article-01-page1.jpg" ],
@@ -224,6 +271,7 @@
     {
       title: "The Newsletter",
       cat: "Substack · Personal Essays",
+      count: "10 issues",
       cover: "covers/newsletter.png",
       wide: false,
       images: Array.from({length:10}, (_,i)=>`newsletter/newsletter${String(i+1).padStart(2,'0')}.jpg`),
@@ -235,6 +283,7 @@
     {
       title: "30 Atomic Essays",
       cat: "Ship30for30 · Short-Form",
+      count: "30 essays",
       cover: "covers/atomic-essays.png",
       wide: true,
       images: Array.from({length:30}, (_,i)=>`ship30 atomic essays/day${String(i+1).padStart(2,'0')}.jpg`),
@@ -244,14 +293,20 @@
 
   const grid = document.getElementById('grid');
   projects.forEach((p, idx) => {
-    const card = document.createElement('div');
+    const card = document.createElement('button');
+    card.type = 'button';
     card.className = 'card';
+    card.setAttribute('aria-label', `Open gallery: ${p.title} — ${p.cat}`);
     card.innerHTML = `
       <div class="frame">
-        <img src="${enc(p.cover)}" alt="${p.title}" loading="lazy" />
-        <div class="overlay"><span></span><span class="view">View →</span></div>
+        <img src="${enc(p.cover)}" alt="${p.title} — cover" loading="lazy" />
+        <div class="overlay"><span class="ocat">${p.cat}</span><span class="view">View →</span></div>
+      </div>
+      <div class="meta">
+        <h3>${p.title}</h3>
+        <div class="side"><span class="cat">${p.cat}</span><span class="count">${p.count}</span></div>
       </div>`;
-    card.addEventListener('click', () => openLb(idx));
+    card.addEventListener('click', () => openLb(idx, card));
     grid.appendChild(card);
   });
 
@@ -260,27 +315,36 @@
   const lbLinks = document.getElementById('lb-links');
   const lbTitle = document.getElementById('lb-title');
   const lbCat = document.getElementById('lb-cat');
+  const lbClose = document.getElementById('lb-close');
+  let lastFocused = null;
 
-  function openLb(idx) {
+  function openLb(idx, opener) {
     const p = projects[idx];
+    lastFocused = opener || document.activeElement;
     lbTitle.childNodes[0].nodeValue = p.title;
     lbCat.textContent = p.cat;
     lbGallery.className = 'lb-gallery' + (p.wide ? ' wide' : '');
-    lbGallery.innerHTML = p.images.map(src => `<img src="${enc(src)}" alt="${p.title}" loading="lazy" />`).join('');
+    lbGallery.innerHTML = p.images.map((src, i) =>
+      `<img src="${enc(src)}" alt="${p.title} — piece ${i+1} of ${p.images.length}" loading="lazy" decoding="async" />`
+    ).join('');
     lbLinks.innerHTML = (p.links||[]).map(l => `<a href="${enc(l.href)}" target="_blank" rel="noopener">${l.label}</a>`).join('');
     lb.classList.add('open');
     lb.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
     document.querySelector('.lb-body').scrollTop = 0;
+    lbClose.focus();
   }
   function closeLb() {
     lb.classList.remove('open');
     lb.setAttribute('aria-hidden','true');
     document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
   }
-  document.getElementById('lb-close').addEventListener('click', closeLb);
+  lbClose.addEventListener('click', closeLb);
   lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lb.classList.contains('open')) closeLb();
+  });
 </script>
 </body>
 </html>
