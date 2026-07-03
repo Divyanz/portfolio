@@ -23,14 +23,14 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #14110f;
     --fg: #f3efe9;
     --muted: #9c948b;
     --line: #35302b;
-    --accent: #f3efe9;
+    --gold: #c8a24c;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -45,9 +45,41 @@
   }
   .wrap { max-width: 1600px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 80px); }
 
+  ::selection { background: var(--fg); color: var(--bg); }
   :focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
 
-  /* HERO */
+  /* ===== FOUNTAIN PEN CURSOR ===== */
+  @media (pointer: fine) {
+    body.pen-on, body.pen-on * { cursor: none !important; }
+  }
+  .pen-cursor {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: 40px; height: 40px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+    will-change: transform;
+  }
+  .pen-cursor svg {
+    display: block; width: 100%; height: 100%;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,.55));
+    transform-origin: 3px 37px; /* the nib tip */
+    transition: transform .25s cubic-bezier(.2,.7,.2,1);
+  }
+  .pen-cursor.hov svg { transform: rotate(-10deg) scale(1.1); }
+  .pen-cursor.press svg { transform: rotate(4deg) scale(.94) translate(1px, 2px); }
+  .ink-dot {
+    position: fixed; z-index: 99; pointer-events: none;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--fg);
+    opacity: .32;
+    animation: inkFade .85s ease-out forwards;
+  }
+  @keyframes inkFade {
+    to { opacity: 0; transform: scale(.15) translateY(3px); }
+  }
+
+  /* ===== HERO ===== */
   .hero { padding: clamp(48px, 12vh, 150px) 0 clamp(24px, 5vh, 56px); }
   .hero h1 {
     font-family: "Cormorant Garamond", serif;
@@ -56,6 +88,7 @@
     line-height: 0.9;
     letter-spacing: -0.01em;
     white-space: nowrap;
+    animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
   }
   .hero-sub {
     margin-top: clamp(18px, 3vh, 32px);
@@ -63,11 +96,19 @@
     font-size: clamp(14px, 1.2vw, 18px);
     letter-spacing: .02em;
     max-width: 60ch;
+    animation: rise .9s cubic-bezier(.2,.7,.2,1) .15s both;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
   }
 
   .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
 
-  /* INFO GRID */
+  /* ===== SCROLL REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ===== INFO GRID ===== */
   .info {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -81,7 +122,7 @@
   .info a:hover { border-color: var(--fg); }
   .info .stack { display: flex; flex-direction: column; gap: 2px; }
 
-  /* SELECTED WORK */
+  /* ===== SELECTED WORK ===== */
   .section-head {
     display: flex; align-items: center; justify-content: center; gap: 14px;
     padding: clamp(40px, 9vh, 110px) 0 clamp(28px, 5vh, 60px);
@@ -108,7 +149,9 @@
     overflow: hidden;
     background: #201b17;
     border: 1px solid var(--line);
+    transition: border-color .35s;
   }
+  .card:hover .frame { border-color: #58504a; }
   .card .frame img {
     width: 100%; height: 100%; object-fit: cover;
     transition: transform .6s cubic-bezier(.2,.7,.2,1), filter .4s;
@@ -133,17 +176,43 @@
   .card .meta .cat { color: var(--muted); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
   .card .meta .count { color: var(--muted); font-size: 13px; }
 
-  /* FOOTER */
-  footer { padding: clamp(40px, 8vh, 90px) 0 clamp(48px, 8vh, 90px); }
+  /* ===== CLOSING CTA ===== */
+  .cta { padding: clamp(56px, 10vh, 130px) 0; text-align: center; }
+  .cta-kicker {
+    color: var(--muted); font-size: 13px; letter-spacing: .16em;
+    text-transform: uppercase; margin-bottom: clamp(14px, 2.5vh, 26px);
+  }
+  .cta-mail {
+    display: inline-block;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(34px, 6vw, 92px);
+    line-height: 1.05;
+    color: var(--fg);
+    text-decoration: none;
+    padding-bottom: 8px;
+    background-image: linear-gradient(var(--fg), var(--fg));
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    transition: background-size .55s cubic-bezier(.2,.7,.2,1);
+  }
+  .cta-mail:hover { background-size: 100% 2px; }
+  .cta-mail .a { font-style: normal; font-size: .55em; vertical-align: .35em; margin-left: .15em; }
+
+  /* ===== FOOTER ===== */
+  footer { padding: 0 0 clamp(48px, 8vh, 90px); }
   .foot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-top: clamp(24px, 4vh, 40px); font-size: clamp(15px, 1.15vw, 19px); }
   .foot-grid .col-r { text-align: right; }
   .foot-grid .lbl { color: var(--muted); margin-bottom: 6px; }
   .foot-grid a { color: var(--fg); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .25s; }
   .foot-grid a:hover { border-color: var(--fg); }
 
-  /* LIGHTBOX */
+  /* ===== LIGHTBOX ===== */
   .lb { position: fixed; inset: 0; background: rgba(10,8,7,.97); z-index: 50; display: none; flex-direction: column; }
-  .lb.open { display: flex; }
+  .lb.open { display: flex; animation: lbIn .3s ease; }
+  @keyframes lbIn { from { opacity: 0; } }
   .lb-top { display: flex; align-items: center; justify-content: space-between; padding: clamp(18px, 3vw, 34px) clamp(20px, 5vw, 60px); flex-shrink: 0; }
   .lb-top .t { font-family: "Cormorant Garamond", serif; font-size: clamp(22px, 3vw, 40px); font-weight: 500; }
   .lb-top .t small { display:block; font-family:"Inter",sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
@@ -173,10 +242,27 @@
       animation-duration: .001ms !important;
     }
     html { scroll-behavior: auto; }
+    .reveal { opacity: 1 !important; transform: none !important; }
   }
 </style>
 </head>
 <body>
+
+<!-- Fountain pen cursor (desktop pointer only) -->
+<div class="pen-cursor" id="pen" aria-hidden="true">
+  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <!-- nib -->
+    <path d="M3 37 L9 25.6 L14.4 31 Z" fill="#c8a24c"/>
+    <line x1="3" y1="37" x2="10.6" y2="29.4" stroke="#14110f" stroke-width="1"/>
+    <circle cx="10.6" cy="29.4" r="1.1" fill="#14110f"/>
+    <!-- section (grip) -->
+    <path d="M9 25.6 L12.4 22.2 L18.2 28 L14.4 31 Z" fill="#5a5148"/>
+    <!-- barrel -->
+    <path d="M12.4 22.2 L28.6 6 A4.1 4.1 0 0 1 34.4 11.8 L18.2 28 Z" fill="#f3efe9"/>
+    <!-- gold band -->
+    <line x1="14" y1="20.6" x2="19.8" y2="26.4" stroke="#c8a24c" stroke-width="1.6"/>
+  </svg>
+</div>
 
 <main class="wrap">
   <section class="hero">
@@ -185,7 +271,7 @@
   </section>
   <hr class="rule" />
 
-  <section class="info">
+  <section class="info reveal">
     <div class="col-l">
       <div class="lbl">Name</div>
       <div>Divyang Desai</div>
@@ -205,14 +291,19 @@
   </section>
   <hr class="rule" />
 
-  <h2 class="section-head">Selected Work <span class="arrow">&#8600;</span></h2>
+  <h2 class="section-head reveal">Selected Work <span class="arrow">&#8600;</span></h2>
 
   <section class="grid" id="grid" aria-label="Selected work"></section>
 </main>
 
 <footer class="wrap">
   <hr class="rule" />
-  <div class="foot-grid">
+  <div class="cta reveal">
+    <p class="cta-kicker">Have a project in mind?</p>
+    <a class="cta-mail" href="mailto:divyangdesai99@gmail.com">Let&rsquo;s write something<span class="a">&#8599;</span></a>
+  </div>
+  <hr class="rule" />
+  <div class="foot-grid reveal">
     <div class="col-l">
       <div class="lbl">Based in</div>
       <div>Toronto, Canada</div>
@@ -295,7 +386,7 @@
   projects.forEach((p, idx) => {
     const card = document.createElement('button');
     card.type = 'button';
-    card.className = 'card';
+    card.className = 'card reveal';
     card.setAttribute('aria-label', `Open gallery: ${p.title} — ${p.cat}`);
     card.innerHTML = `
       <div class="frame">
@@ -310,6 +401,15 @@
     grid.appendChild(card);
   });
 
+  /* ===== Scroll reveal ===== */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ===== Lightbox ===== */
   const lb = document.getElementById('lb');
   const lbGallery = document.getElementById('lb-gallery');
   const lbLinks = document.getElementById('lb-links');
@@ -345,6 +445,54 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && lb.classList.contains('open')) closeLb();
   });
+
+  /* ===== Fountain pen cursor ===== */
+  (function () {
+    if (!matchMedia('(pointer: fine)').matches) return; // touch devices keep native behavior
+    const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pen = document.getElementById('pen');
+    document.body.classList.add('pen-on');
+
+    let mx = innerWidth / 2, my = innerHeight / 2;   // real pointer
+    let px = mx, py = my;                            // pen (lagged)
+    let lastDot = 0, shown = false;
+
+    addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      if (!shown) { pen.style.opacity = '1'; shown = true; }
+      // ink trail (skipped for reduced motion)
+      if (!noMotion) {
+        const now = performance.now();
+        if (now - lastDot > 55) {
+          lastDot = now;
+          const d = document.createElement('span');
+          d.className = 'ink-dot';
+          d.style.left = (mx - 2.5) + 'px';
+          d.style.top = (my - 2.5) + 'px';
+          document.body.appendChild(d);
+          d.addEventListener('animationend', () => d.remove());
+        }
+      }
+    }, { passive: true });
+
+    document.documentElement.addEventListener('mouseleave', () => { pen.style.opacity = '0'; shown = false; });
+    addEventListener('mousedown', () => pen.classList.add('press'));
+    addEventListener('mouseup', () => pen.classList.remove('press'));
+
+    // Tilt/grow over interactive elements
+    document.addEventListener('mouseover', e => {
+      pen.classList.toggle('hov', !!e.target.closest('a, button'));
+    });
+
+    // Smooth-follow loop: nib tip (3,37 in the 40px box) rides the pointer
+    const ease = noMotion ? 1 : 0.22;
+    (function loop() {
+      px += (mx - px) * ease;
+      py += (my - py) * ease;
+      pen.style.transform = `translate(${px - 3}px, ${py - 37}px)`;
+      requestAnimationFrame(loop);
+    })();
+  })();
 </script>
 </body>
 </html>
