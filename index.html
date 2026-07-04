@@ -54,7 +54,7 @@
   }
   .pen-cursor {
     position: fixed; top: 0; left: 0; z-index: 100;
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     pointer-events: none;
     opacity: 0;
     transition: opacity .3s;
@@ -62,8 +62,8 @@
   }
   .pen-cursor svg {
     display: block; width: 100%; height: 100%;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,.55));
-    transform-origin: 3px 37px; /* the nib tip */
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,.5));
+    transform-origin: 5px 39px; /* the nib tip */
     transition: transform .25s cubic-bezier(.2,.7,.2,1);
   }
   .pen-cursor.hov svg { transform: rotate(-10deg) scale(1.1); }
@@ -250,17 +250,50 @@
 
 <!-- Fountain pen cursor (desktop pointer only) -->
 <div class="pen-cursor" id="pen" aria-hidden="true">
-  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-    <!-- nib -->
-    <path d="M3 37 L9 25.6 L14.4 31 Z" fill="#c8a24c"/>
-    <line x1="3" y1="37" x2="10.6" y2="29.4" stroke="#14110f" stroke-width="1"/>
-    <circle cx="10.6" cy="29.4" r="1.1" fill="#14110f"/>
-    <!-- section (grip) -->
-    <path d="M9 25.6 L12.4 22.2 L18.2 28 L14.4 31 Z" fill="#5a5148"/>
-    <!-- barrel -->
-    <path d="M12.4 22.2 L28.6 6 A4.1 4.1 0 0 1 34.4 11.8 L18.2 28 Z" fill="#f3efe9"/>
-    <!-- gold band -->
-    <line x1="14" y1="20.6" x2="19.8" y2="26.4" stroke="#c8a24c" stroke-width="1.6"/>
+  <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- metallic gold: dark edge → bright ridge → dark edge -->
+      <linearGradient id="pgGold" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#7a5c1c"/>
+        <stop offset="0.45" stop-color="#ecd087"/>
+        <stop offset="0.6" stop-color="#c8a24c"/>
+        <stop offset="1" stop-color="#8a6a24"/>
+      </linearGradient>
+      <!-- polished black lacquer -->
+      <linearGradient id="pgLac" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#55555c"/>
+        <stop offset="0.35" stop-color="#232327"/>
+        <stop offset="1" stop-color="#050506"/>
+      </linearGradient>
+      <linearGradient id="pgBand" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8a6a24"/>
+        <stop offset="0.5" stop-color="#ecd087"/>
+        <stop offset="1" stop-color="#7a5c1c"/>
+      </linearGradient>
+    </defs>
+    <!-- pen drawn vertically (tip at 5,39), leaned 45° like a writing hand -->
+    <g transform="rotate(45 5 39)">
+      <!-- barrel + domed cap top -->
+      <path d="M2.3 26.7 L2.3 8 Q2.3 5.6 5 5.6 Q7.7 5.6 7.7 8 L7.7 26.7 Z" fill="url(#pgLac)"/>
+      <!-- lacquer specular highlight -->
+      <rect x="3.05" y="7.6" width="0.8" height="18.2" rx="0.4" fill="#ffffff" opacity="0.16"/>
+      <!-- cap lip ring -->
+      <rect x="2.3" y="11.2" width="5.4" height="0.65" fill="url(#pgBand)" opacity="0.95"/>
+      <!-- clip -->
+      <rect x="7.35" y="6.9" width="1.05" height="8.8" rx="0.5" fill="url(#pgGold)"/>
+      <circle cx="7.87" cy="16" r="0.7" fill="#c8a24c"/>
+      <!-- center band -->
+      <rect x="2.35" y="26.7" width="5.3" height="1.05" rx="0.2" fill="url(#pgBand)"/>
+      <!-- section (grip) -->
+      <path d="M2.45 27.75 L2.15 30.9 Q5 32.2 7.85 30.9 L7.55 27.75 Z" fill="url(#pgLac)"/>
+      <!-- nib -->
+      <path d="M5 39 C4.1 36.8 3 34.6 2.2 32.4 Q1.9 31.7 2 31.2 L2 30.7 Q5 29.3 8 30.7 L8 31.2 Q8.1 31.7 7.8 32.4 C7 34.6 5.9 36.8 5 39 Z" fill="url(#pgGold)"/>
+      <!-- nib slit + breather hole -->
+      <line x1="5" y1="38.1" x2="5" y2="33.7" stroke="#5c4514" stroke-width="0.45"/>
+      <circle cx="5" cy="33.3" r="0.55" fill="#3d2e0d"/>
+      <!-- nib shoulder engraving line -->
+      <path d="M2.6 31.6 Q5 30.6 7.4 31.6" fill="none" stroke="#5c4514" stroke-width="0.35" opacity="0.7"/>
+    </g>
   </svg>
 </div>
 
@@ -489,7 +522,7 @@
     (function loop() {
       px += (mx - px) * ease;
       py += (my - py) * ease;
-      pen.style.transform = `translate(${px - 3}px, ${py - 37}px)`;
+      pen.style.transform = `translate(${px - 5}px, ${py - 39}px)`;
       requestAnimationFrame(loop);
     })();
   })();
