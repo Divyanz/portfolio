@@ -88,6 +88,7 @@
     line-height: 0.9;
     letter-spacing: -0.01em;
     white-space: nowrap;
+    padding-bottom: .14em; /* clear the y/g descenders (line-height .9 crops them) */
     animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
   }
   .hero-sub {
@@ -175,6 +176,7 @@
   .card .meta .side { text-align: right; display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
   .card .meta .cat { color: var(--muted); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
   .card .meta .count { color: var(--muted); font-size: 13px; }
+  .card .desc { margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 58ch; }
 
   /* ===== CLOSING CTA ===== */
   .cta { padding: clamp(56px, 10vh, 130px) 0; text-align: center; }
@@ -202,8 +204,8 @@
   .cta-mail .a { font-style: normal; font-size: .55em; vertical-align: .35em; margin-left: .15em; }
 
   /* ===== FOOTER ===== */
-  footer { padding: 0 0 clamp(48px, 8vh, 90px); }
-  .foot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-top: clamp(24px, 4vh, 40px); font-size: clamp(15px, 1.15vw, 19px); }
+  footer.wrap { padding-bottom: clamp(72px, 11vh, 130px); } /* .wrap's shorthand would zero this at lower specificity */
+  .foot-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-top: clamp(36px, 6vh, 64px); font-size: clamp(15px, 1.15vw, 19px); }
   .foot-grid .col-r { text-align: right; }
   .foot-grid .lbl { color: var(--muted); margin-bottom: 6px; }
   .foot-grid a { color: var(--fg); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .25s; }
@@ -219,9 +221,27 @@
   .lb-close { background: none; border: 1px solid var(--line); color: var(--fg); width: 46px; height: 46px; border-radius: 50%; font-size: 20px; cursor: pointer; transition: background .25s, border-color .25s; flex-shrink:0; }
   .lb-close:hover { background: var(--fg); color: var(--bg); }
   .lb-body { flex: 1; overflow-y: auto; padding: 0 clamp(20px, 5vw, 60px) clamp(40px, 8vh, 80px); }
+  .lb-desc { max-width: 1100px; margin: 0 auto clamp(24px, 4vh, 40px); color: var(--muted); font-size: 15px; line-height: 1.6; }
   .lb-gallery { display: grid; gap: clamp(16px, 2.5vw, 40px); max-width: 1100px; margin: 0 auto; }
   .lb-gallery.wide { grid-template-columns: 1fr 1fr; }
   .lb-gallery img { width: 100%; height: auto; display: block; border: 1px solid var(--line); background:#201b17; }
+
+  /* Site-native "post" frames (newsletter issues, atomic essays) */
+  .post { border: 1px solid var(--line); background: #1a1613; }
+  .post-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .post-head .no { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: 20px; }
+  .post-head .tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .post-body { padding: clamp(12px, 1.6vw, 18px); background: #171310; }
+  .post-body img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line);
+    /* pull stark white screenshots toward the site's warm paper tone */
+    filter: sepia(.16) saturate(.9) brightness(.95) contrast(.97);
+  }
   .lb-links { max-width: 1100px; margin: 24px auto 0; display:flex; gap:18px; flex-wrap:wrap; }
   .lb-links a { color: var(--muted); font-size: 13px; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px; transition:color .25s,border-color .25s; }
   .lb-links a:hover { color: var(--fg); border-color: var(--fg); }
@@ -359,6 +379,7 @@
     <button class="lb-close" id="lb-close" aria-label="Close gallery">&times;</button>
   </div>
   <div class="lb-body">
+    <p class="lb-desc" id="lb-desc"></p>
     <div class="lb-gallery" id="lb-gallery"></div>
     <div class="lb-links" id="lb-links"></div>
   </div>
@@ -372,6 +393,7 @@
       title: "Carry Cast",
       cat: "Static Ads · Direct Response",
       count: "5 ads",
+      desc: "Direct-response static ads for a collapsible fishing rod — each one opens with an objection and closes with the product.",
       cover: "static-ads/carrycast/Traditional vs Carry Cast.png",
       wide: true,
       images: [
@@ -387,6 +409,7 @@
       title: "Long-Form Essay",
       cat: "Medium · Editorial",
       count: "Essay + PDF",
+      desc: "A personal essay for Medium on coffee, 15-hour sleeps, and getting a life back — narrative first, lesson second.",
       cover: "covers/long-form.jpg",
       wide: false,
       images: [ "medium/medium-article-01-page1.jpg" ],
@@ -396,6 +419,8 @@
       title: "The Newsletter",
       cat: "Substack · Personal Essays",
       count: "10 issues",
+      desc: "Ten weekly issues on personal finance for people starting out — pay, rent, saving, and the habits that compound.",
+      post: "Issue", postTag: "Substack",
       cover: "covers/newsletter.png",
       wide: false,
       images: Array.from({length:10}, (_,i)=>`newsletter/newsletter${String(i+1).padStart(2,'0')}.jpg`),
@@ -408,6 +433,8 @@
       title: "30 Atomic Essays",
       cat: "Ship30for30 · Short-Form",
       count: "30 essays",
+      desc: "One idea, one page, every day for thirty days — written and shipped publicly through Ship 30 for 30.",
+      post: "Day", postTag: "Ship 30 for 30",
       cover: "covers/atomic-essays.png",
       wide: true,
       images: Array.from({length:30}, (_,i)=>`ship30 atomic essays/day${String(i+1).padStart(2,'0')}.jpg`),
@@ -429,7 +456,8 @@
       <div class="meta">
         <h3>${p.title}</h3>
         <div class="side"><span class="cat">${p.cat}</span><span class="count">${p.count}</span></div>
-      </div>`;
+      </div>
+      <p class="desc">${p.desc}</p>`;
     card.addEventListener('click', () => openLb(idx, card));
     grid.appendChild(card);
   });
@@ -456,10 +484,22 @@
     lastFocused = opener || document.activeElement;
     lbTitle.childNodes[0].nodeValue = p.title;
     lbCat.textContent = p.cat;
+    document.getElementById('lb-desc').textContent = p.desc || '';
     lbGallery.className = 'lb-gallery' + (p.wide ? ' wide' : '');
-    lbGallery.innerHTML = p.images.map((src, i) =>
-      `<img src="${enc(src)}" alt="${p.title} — piece ${i+1} of ${p.images.length}" loading="lazy" decoding="async" />`
-    ).join('');
+    if (p.post) {
+      // site-native post frames instead of raw white screenshots
+      lbGallery.innerHTML = p.images.map((src, i) => {
+        const label = `${p.post} ${String(i+1).padStart(2,'0')}`;
+        return `<article class="post">
+          <div class="post-head"><span class="no">${label}</span><span class="tag">${p.postTag}</span></div>
+          <div class="post-body"><img src="${enc(src)}" alt="${p.title} — ${label}" loading="lazy" decoding="async" /></div>
+        </article>`;
+      }).join('');
+    } else {
+      lbGallery.innerHTML = p.images.map((src, i) =>
+        `<img src="${enc(src)}" alt="${p.title} — piece ${i+1} of ${p.images.length}" loading="lazy" decoding="async" />`
+      ).join('');
+    }
     lbLinks.innerHTML = (p.links||[]).map(l => `<a href="${enc(l.href)}" target="_blank" rel="noopener">${l.label}</a>`).join('');
     lb.classList.add('open');
     lb.setAttribute('aria-hidden','false');
