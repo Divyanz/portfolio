@@ -458,7 +458,11 @@
         <div class="side"><span class="cat">${p.cat}</span><span class="count">${p.count}</span></div>
       </div>
       <p class="desc">${p.desc}</p>`;
-    card.addEventListener('click', () => openLb(idx, card));
+    card.addEventListener('click', () => {
+      lastFocused = card;
+      openedViaClick = true;
+      location.hash = '#/work/' + p.slug; // router renders it
+    });
     grid.appendChild(card);
   });
 
@@ -470,18 +474,25 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  /* ===== Lightbox ===== */
+  /* ===== Project pages + hash router =====
+     Each project lives at #/work/<slug> — shareable, refreshable, and the
+     browser back/forward buttons drive the view (URL is the source of truth). */
   const lb = document.getElementById('lb');
   const lbGallery = document.getElementById('lb-gallery');
   const lbLinks = document.getElementById('lb-links');
   const lbTitle = document.getElementById('lb-title');
   const lbCat = document.getElementById('lb-cat');
   const lbClose = document.getElementById('lb-close');
+  const DEFAULT_TITLE = document.title;
   let lastFocused = null;
+  let openedViaClick = false; // true when the current project was pushed by an in-page click
+  let openIdx = -1;
 
-  function openLb(idx, opener) {
+  const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  projects.forEach(p => p.slug = slugify(p.title));
+
+  function renderProject(idx) {
     const p = projects[idx];
-    lastFocused = opener || document.activeElement;
     lbTitle.childNodes[0].nodeValue = p.title;
     lbCat.textContent = p.cat;
     document.getElementById('lb-desc').textContent = p.desc || '';
@@ -505,19 +516,49 @@
     lb.setAttribute('aria-hidden','false');
     document.body.style.overflow = 'hidden';
     document.querySelector('.lb-body').scrollTop = 0;
+    document.title = `${p.title} — Divyang Desai`;
+    openIdx = idx;
     lbClose.focus();
   }
-  function closeLb() {
+
+  function renderHome() {
+    document.title = DEFAULT_TITLE;
+    if (!lb.classList.contains('open')) return;
     lb.classList.remove('open');
     lb.setAttribute('aria-hidden','true');
     document.body.style.overflow = '';
-    if (lastFocused) lastFocused.focus();
+    const prev = openIdx;
+    openIdx = -1;
+    openedViaClick = false;
+    if (lastFocused && document.contains(lastFocused)) lastFocused.focus();
+    else if (prev >= 0) {
+      const c = grid.querySelectorAll('.card')[prev];
+      if (c) c.focus();
+    }
   }
-  lbClose.addEventListener('click', closeLb);
-  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+  function applyRoute() {
+    const m = location.hash.match(/^#\/work\/([a-z0-9-]+)/);
+    const idx = m ? projects.findIndex(p => p.slug === m[1]) : -1;
+    if (idx >= 0) renderProject(idx);
+    else renderHome();
+  }
+
+  // Close = go back. If the project was opened in-page, pop the history entry
+  // we pushed; on a cold deep link, going "back" would leave the site, so
+  // navigate home instead.
+  function navigateHome() {
+    if (openedViaClick) history.back();
+    else location.hash = '#/';
+  }
+
+  lbClose.addEventListener('click', navigateHome);
+  lb.addEventListener('click', e => { if (e.target === lb) navigateHome(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && lb.classList.contains('open')) closeLb();
+    if (e.key === 'Escape' && lb.classList.contains('open')) navigateHome();
   });
+  window.addEventListener('hashchange', applyRoute);
+  applyRoute(); // honor a deep link on first load
 
   /* ===== Fountain pen cursor ===== */
   (function () {
