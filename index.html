@@ -85,32 +85,6 @@
     background: linear-gradient(90deg, var(--gold), var(--fg));
   }
 
-  /* ===== FOUNTAIN PEN CURSOR ===== */
-  @media (pointer: fine) {
-    body.pen-on, body.pen-on * { cursor: none !important; }
-  }
-  .pen-cursor {
-    position: fixed; top: 0; left: 0; z-index: 280;
-    width: 44px; height: 44px;
-    pointer-events: none; opacity: 0;
-    transition: opacity .3s; will-change: transform;
-  }
-  .pen-cursor svg {
-    display: block; width: 100%; height: 100%;
-    filter: drop-shadow(0 3px 5px rgba(0,0,0,.5));
-    transform-origin: 5px 39px;
-    transition: transform .25s var(--ease);
-  }
-  .pen-cursor.hov svg { transform: rotate(-10deg) scale(1.1); }
-  .pen-cursor.press svg { transform: rotate(4deg) scale(.94) translate(1px, 2px); }
-  .ink-dot {
-    position: fixed; z-index: 270; pointer-events: none;
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--fg); opacity: .3;
-    animation: inkFade .85s ease-out forwards;
-  }
-  @keyframes inkFade { to { opacity: 0; transform: scale(.15) translateY(3px); } }
-
   /* ===== NAV ===== */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 200;
@@ -472,39 +446,6 @@
 <a class="skip" href="#work">Skip to work</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
-
-<!-- Fountain pen cursor -->
-<div class="pen-cursor" id="pen" aria-hidden="true">
-  <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="pgGold" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#7a5c1c"/><stop offset="0.45" stop-color="#ecd087"/>
-        <stop offset="0.6" stop-color="#c8a24c"/><stop offset="1" stop-color="#8a6a24"/>
-      </linearGradient>
-      <linearGradient id="pgLac" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#55555c"/><stop offset="0.35" stop-color="#232327"/>
-        <stop offset="1" stop-color="#050506"/>
-      </linearGradient>
-      <linearGradient id="pgBand" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#8a6a24"/><stop offset="0.5" stop-color="#ecd087"/>
-        <stop offset="1" stop-color="#7a5c1c"/>
-      </linearGradient>
-    </defs>
-    <g transform="rotate(45 5 39)">
-      <path d="M2.3 26.7 L2.3 8 Q2.3 5.6 5 5.6 Q7.7 5.6 7.7 8 L7.7 26.7 Z" fill="url(#pgLac)"/>
-      <rect x="3.05" y="7.6" width="0.8" height="18.2" rx="0.4" fill="#ffffff" opacity="0.16"/>
-      <rect x="2.3" y="11.2" width="5.4" height="0.65" fill="url(#pgBand)" opacity="0.95"/>
-      <rect x="7.35" y="6.9" width="1.05" height="8.8" rx="0.5" fill="url(#pgGold)"/>
-      <circle cx="7.87" cy="16" r="0.7" fill="#c8a24c"/>
-      <rect x="2.35" y="26.7" width="5.3" height="1.05" rx="0.2" fill="url(#pgBand)"/>
-      <path d="M2.45 27.75 L2.15 30.9 Q5 32.2 7.85 30.9 L7.55 27.75 Z" fill="url(#pgLac)"/>
-      <path d="M5 39 C4.1 36.8 3 34.6 2.2 32.4 Q1.9 31.7 2 31.2 L2 30.7 Q5 29.3 8 30.7 L8 31.2 Q8.1 31.7 7.8 32.4 C7 34.6 5.9 36.8 5 39 Z" fill="url(#pgGold)"/>
-      <line x1="5" y1="38.1" x2="5" y2="33.7" stroke="#5c4514" stroke-width="0.45"/>
-      <circle cx="5" cy="33.3" r="0.55" fill="#3d2e0d"/>
-      <path d="M2.6 31.6 Q5 30.6 7.4 31.6" fill="none" stroke="#5c4514" stroke-width="0.35" opacity="0.7"/>
-    </g>
-  </svg>
-</div>
 
 <nav class="nav" aria-label="Site">
   <a class="brand" href="#top">Divyang Desai</a>
@@ -931,46 +872,6 @@
   });
   window.addEventListener('hashchange', applyRoute);
   applyRoute();
-
-  /* ===== Fountain pen cursor ===== */
-  (function () {
-    if (!matchMedia('(pointer: fine)').matches) return;
-    const pen = document.getElementById('pen');
-    document.body.classList.add('pen-on');
-    let mx = innerWidth / 2, my = innerHeight / 2, px = mx, py = my, lastDot = 0, shown = false;
-
-    addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      if (!shown) { pen.style.opacity = '1'; shown = true; }
-      if (!REDUCED) {
-        const now = performance.now();
-        if (now - lastDot > 55) {
-          lastDot = now;
-          const d = document.createElement('span');
-          d.className = 'ink-dot';
-          d.style.left = (mx - 2.5) + 'px';
-          d.style.top = (my - 2.5) + 'px';
-          document.body.appendChild(d);
-          d.addEventListener('animationend', () => d.remove());
-        }
-      }
-    }, { passive: true });
-
-    document.documentElement.addEventListener('mouseleave', () => { pen.style.opacity = '0'; shown = false; });
-    addEventListener('mousedown', () => pen.classList.add('press'));
-    addEventListener('mouseup', () => pen.classList.remove('press'));
-    document.addEventListener('mouseover', e => {
-      pen.classList.toggle('hov', !!e.target.closest('a, button'));
-    });
-
-    const ease = REDUCED ? 1 : 0.22;
-    (function loop() {
-      px += (mx - px) * ease;
-      py += (my - py) * ease;
-      pen.style.transform = `translate(${px - 5}px, ${py - 39}px)`;
-      requestAnimationFrame(loop);
-    })();
-  })();
 </script>
 </body>
 </html>
