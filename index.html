@@ -65,8 +65,9 @@
 
   /* ===== FILM GRAIN ===== */
   .grain {
-    position: fixed; inset: -50%; z-index: 250; pointer-events: none;
-    width: 200%; height: 200%;
+    position: fixed; inset: -15%; z-index: 250; pointer-events: none;
+    width: 130%; height: 130%; /* texture tiles; ±8% shifts stay covered — 4x less layer than 200% */
+    will-change: transform;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
     opacity: .045;
     animation: grain 8s steps(10) infinite;
@@ -190,6 +191,7 @@
   .marquee .track {
     display: flex; gap: 0; width: max-content;
     animation: mq 26s linear infinite;
+    will-change: transform;
   }
   .marquee:hover .track { animation-play-state: paused; }
   .marquee .set {
@@ -256,9 +258,11 @@
   .wr-cta {
     display: inline-flex; align-items: center; gap: 8px;
     margin-top: 18px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--fg); opacity: .55; transition: opacity .3s, gap .3s var(--ease);
+    color: var(--fg); opacity: .55; transition: opacity .3s;
   }
-  .work-row:hover .wr-cta { opacity: 1; gap: 14px; }
+  .wr-cta .arr { display: inline-block; transition: transform .3s var(--ease); }
+  .work-row:hover .wr-cta { opacity: 1; }
+  .work-row:hover .wr-cta .arr { transform: translateX(6px); } /* transform, not gap: no relayout */
   .wr-cover {
     position: relative; overflow: hidden;
     aspect-ratio: 4 / 3;
@@ -358,7 +362,7 @@
   }
 
   /* ===== REVEAL ENGINE ===== */
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s var(--ease); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s var(--ease); will-change: opacity, transform; }
   .reveal.in { opacity: 1; transform: none; }
   .reveal[data-d="1"] { transition-delay: .08s; } .reveal[data-d="2"] { transition-delay: .16s; }
   .reveal[data-d="3"] { transition-delay: .24s; } .reveal[data-d="4"] { transition-delay: .32s; }
@@ -711,10 +715,10 @@
         <span class="wr-title">${p.title}</span>
         <span class="wr-meta">${p.cat} — ${p.count}</span>
         <span class="wr-desc">${p.desc}</span>
-        <span class="wr-cta">View project <span aria-hidden="true">&#8594;</span></span>
+        <span class="wr-cta">View project <span class="arr" aria-hidden="true">&#8594;</span></span>
       </span>
       <span class="wr-cover">
-        <img src="${enc(p.cover)}" alt="${p.title} — cover" loading="lazy" data-parallax />
+        <img src="${enc(p.cover)}" alt="${p.title} — cover" loading="lazy" decoding="async" data-parallax />
         <span class="peek">${p.count}</span>
       </span>`;
     b.addEventListener('click', () => {
@@ -727,7 +731,14 @@
 
   /* ===== Reveal engine ===== */
   const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('in');
+    io.unobserve(el);
+    // drop the compositor hint once the entrance settles (frees GPU memory)
+    const done = () => { el.style.willChange = 'auto'; };
+    el.addEventListener('transitionend', done, { once: true });
+    setTimeout(done, 1500); // fallback if transitionend never fires
   }), { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
@@ -746,30 +757,38 @@
   }), { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
 
-  /* ===== Scroll-driven: progress bar, ink-fill headings, cover parallax ===== */
+  /* ===== Scroll-driven: progress bar, ink-fill headings, cover parallax =====
+     All layout READS happen before any style WRITES (one layout pass per
+     frame, no forced reflow), and writes are skipped when nothing changed
+     or the element is off-screen. */
   const progress = document.getElementById('progress');
-  const fills = [...document.querySelectorAll('[data-fill]')];
-  const pimgs = [...document.querySelectorAll('[data-parallax]')];
+  const fills = [...document.querySelectorAll('[data-fill]')].map(el => ({ el, last: -1 }));
+  const pimgs = [...document.querySelectorAll('[data-parallax]')].map(img => ({ img, last: NaN }));
   let ticking = false;
   function onScroll() {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
       ticking = false;
-      const max = document.documentElement.scrollHeight - innerHeight;
-      progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-      if (REDUCED) return;
       const vh = innerHeight;
-      fills.forEach(el => {
-        const r = el.getBoundingClientRect();
+      // --- reads ---
+      const max = document.documentElement.scrollHeight - vh;
+      const y = scrollY;
+      const fRects = REDUCED ? [] : fills.map(f => f.el.getBoundingClientRect());
+      const pRects = REDUCED ? [] : pimgs.map(p => p.img.parentElement.getBoundingClientRect());
+      // --- writes ---
+      progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      fRects.forEach((r, i) => {
+        if (r.bottom < 0 || r.top > vh) return; // off-screen: don't repaint big text
         const k = Math.min(1, Math.max(0, (vh * 0.9 - r.top) / (vh * 0.55)));
-        el.style.setProperty('--p', (k * 100).toFixed(1) + '%');
+        const p = Math.round(k * 100); // whole-% steps: ~100 paints per heading, total
+        if (p !== fills[i].last) { fills[i].last = p; fills[i].el.style.setProperty('--p', p + '%'); }
       });
-      pimgs.forEach(img => {
-        const r = img.parentElement.getBoundingClientRect();
+      pRects.forEach((r, i) => {
         if (r.bottom < 0 || r.top > vh) return;
         const k = (r.top + r.height / 2 - vh / 2) / vh; // -0.5..0.5
-        img.style.transform = `translateY(${(-k * 10).toFixed(2)}%)`;
+        const ty = Math.round(-k * 100) / 10; // 0.1% steps
+        if (ty !== pimgs[i].last) { pimgs[i].last = ty; pimgs[i].img.style.transform = `translateY(${ty}%)`; }
       });
     });
   }
@@ -777,17 +796,23 @@
   addEventListener('resize', onScroll, { passive: true });
   onScroll();
 
-  /* ===== Magnetic elements ===== */
+  /* ===== Magnetic elements (rAF-batched: one write per frame max) ===== */
   if (!REDUCED && matchMedia('(pointer: fine)').matches) {
     document.querySelectorAll('.magnetic').forEach(el => {
-      const R = 90;
+      let raf = 0, lx = 0, ly = 0;
       el.addEventListener('mousemove', e => {
-        const r = el.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2);
-        const dy = e.clientY - (r.top + r.height / 2);
-        el.style.transform = `translate(${dx * .18}px, ${dy * .22}px)`;
+        lx = e.clientX; ly = e.clientY;
+        if (raf) return; // mousemove can outpace frames — coalesce
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = el.getBoundingClientRect();
+          const dx = lx - (r.left + r.width / 2);
+          const dy = ly - (r.top + r.height / 2);
+          el.style.transform = `translate(${dx * .18}px, ${dy * .22}px)`;
+        });
       });
       el.addEventListener('mouseleave', () => {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
         el.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1.4)';
         el.style.transform = '';
         setTimeout(() => el.style.transition = '', 500);
