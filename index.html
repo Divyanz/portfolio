@@ -144,19 +144,21 @@
     display: flex; align-items: baseline; gap: .45em; flex-wrap: wrap;
   }
   .hero .writes .rot {
-    position: relative; display: inline-block;
-    min-width: 7.2ch; height: 1.25em; overflow: hidden;
-    vertical-align: bottom;
+    display: inline-grid;           /* words stack in one cell and size the box naturally */
+    overflow: hidden;
+    flex-shrink: 0;                 /* never squeeze the word — wrap the line instead */
+    transition: width .5s var(--ease); /* JS animates width to the active word */
   }
   .hero .writes .rot span {
-    position: absolute; left: 0; top: 0; white-space: nowrap;
+    grid-area: 1 / 1; justify-self: start;
+    white-space: nowrap;
     font-style: italic; color: var(--gold);
-    transform: translateY(110%);
+    transform: translateY(120%);
     transition: transform .55s var(--ease), opacity .4s;
     opacity: 0;
   }
   .hero .writes .rot span.on { transform: none; opacity: 1; }
-  .hero .writes .rot span.off { transform: translateY(-110%); opacity: 0; }
+  .hero .writes .rot span.off { transform: translateY(-120%); opacity: 0; }
 
   /* self-drawing ink underline */
   .ink-stroke { display: block; margin-top: clamp(20px, 3.5vh, 36px); width: min(340px, 60%); height: 14px; }
@@ -650,13 +652,38 @@
       if (i === 0) s.className = 'on';
       rot.appendChild(s);
     });
-    if (REDUCED) return;
+    const spans = rot.children;
     let cur = 0;
+
+    // Fit the box to the active word (words are grid-stacked, so the
+    // container would otherwise stay as wide as the widest one).
+    // The first set must not animate: transitioning width from `auto`
+    // is engine-dependent (some animate from 0 and clip the word).
+    let fitted = false;
+    function fit() {
+      const w = spans[cur].getBoundingClientRect().width;
+      if (!w) return; // fonts mid-swap: keep last good width rather than collapse
+      if (!fitted) {
+        rot.style.transition = 'none';
+        rot.style.width = w + 'px';
+        void rot.offsetWidth; // flush so the next change animates from here
+        rot.style.transition = '';
+        fitted = true;
+      } else {
+        rot.style.width = w + 'px';
+      }
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    fit();
+    let rsz;
+    addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(fit, 150); });
+
+    if (REDUCED) return;
     setInterval(() => {
-      const spans = rot.children;
       spans[cur].className = 'off';
       cur = (cur + 1) % spans.length;
       spans[cur].className = 'on';
+      fit();
       setTimeout(() => { [...spans].forEach((s, i) => { if (i !== cur) s.className = ''; }); }, 600);
     }, 2200);
   })();
