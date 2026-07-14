@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Divyang Desai — Copywriter</title>
-<meta name="description" content="Copywriter portfolio of Divyang Desai — direct-response static ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<title>Divyang Desai — Copywriter &amp; Creative Strategist</title>
+<meta name="description" content="Copywriter and creative strategist — direct-response ads, long-form essays, newsletters, and end-to-end creative strategy systems: research, testing grids, briefs, and shoot-ready scripts." />
 <meta name="theme-color" content="#0f0d0b" />
 <link rel="canonical" href="https://divyanz.github.io/portfolio/" />
 
 <!-- Social sharing -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Divyang Desai — Copywriter" />
-<meta property="og:description" content="Direct-response ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<meta property="og:title" content="Divyang Desai — Copywriter &amp; Creative Strategist" />
+<meta property="og:description" content="Direct-response ads, essays, newsletters — and the creative-strategy systems behind them." />
 <meta property="og:url" content="https://divyanz.github.io/portfolio/" />
 <meta property="og:image" content="https://divyanz.github.io/portfolio/covers/carry-cast.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Divyang Desai — Copywriter" />
-<meta name="twitter:description" content="Direct-response ads, long-form essays, newsletters, and 30 days of atomic essays." />
+<meta name="twitter:title" content="Divyang Desai — Copywriter &amp; Creative Strategist" />
+<meta name="twitter:description" content="Direct-response ads, essays, newsletters — and the creative-strategy systems behind them." />
 <meta name="twitter:image" content="https://divyanz.github.io/portfolio/covers/carry-cast.png" />
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230f0d0b'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23f3efe9' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
@@ -292,6 +292,107 @@
     .work-row:hover .wr-title { transform: none; }
   }
 
+  /* ===== CREATIVE STRATEGY (featured card) ===== */
+  .strategy-card {
+    display: block; width: 100%; text-align: left;
+    border: 1px solid var(--line);
+    padding: clamp(28px, 4.5vw, 60px);
+    background: linear-gradient(135deg, rgba(200,162,76,.06), transparent 55%);
+    transition: border-color .35s;
+  }
+  .strategy-card:hover { border-color: var(--gold); }
+  .sc-kicker {
+    display: block; font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+  }
+  .sc-brand {
+    display: block; font-family: var(--serif); font-weight: 500;
+    font-size: clamp(34px, 5.4vw, 84px); line-height: 1.05;
+    transition: transform .45s var(--ease);
+  }
+  .sc-brand em { font-style: italic; font-size: .42em; color: var(--muted); letter-spacing: .01em; }
+  .strategy-card:hover .sc-brand { transform: translateX(10px); }
+  .sc-desc {
+    display: block; margin-top: 16px; color: var(--muted);
+    font-size: 15px; line-height: 1.65; max-width: 62ch;
+  }
+  .sc-stages {
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: 10px 14px; margin-top: 26px; font-size: 13px; letter-spacing: .04em;
+  }
+  .sc-stages i { font-family: var(--serif); font-style: italic; color: var(--gold); margin-right: 6px; }
+  .sc-stages .sep { color: var(--muted); opacity: .6; }
+  .sc-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 26px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--fg); opacity: .55; transition: opacity .3s;
+  }
+  .sc-cta .arr { display: inline-block; transition: transform .3s var(--ease); }
+  .strategy-card:hover .sc-cta { opacity: 1; }
+  .strategy-card:hover .sc-cta .arr { transform: translateX(6px); }
+
+  /* ===== STRATEGY PAGE (stages) ===== */
+  .stage { border-top: 1px solid var(--line); padding: clamp(30px, 5.5vh, 56px) 0 clamp(8px, 1.5vh, 14px); }
+  .stage:first-child { border-top: 0; padding-top: 0; }
+  .stage-head { display: flex; align-items: baseline; gap: 16px; }
+  .stage-no { font-family: var(--serif); font-style: italic; color: var(--gold); font-size: clamp(20px, 2.4vw, 30px); }
+  .stage-title { font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 3.4vw, 48px); line-height: 1.1; }
+  .stage-intro { margin-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.65; max-width: 62ch; }
+  .stage-body { margin-top: 24px; display: grid; gap: 20px; }
+  .stage-links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 4px; }
+  .stage-links a {
+    color: var(--muted); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 3px;
+    transition: color .25s, border-color .25s;
+  }
+  .stage-links a:hover { color: var(--fg); border-color: var(--gold); }
+
+  .quote-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .quote {
+    border: 1px solid var(--line); background: #171310;
+    padding: 18px 20px;
+    font-family: var(--serif); font-style: italic;
+    font-size: 17px; line-height: 1.45;
+  }
+  .quote small {
+    display: block; margin-top: 12px;
+    font-family: var(--sans); font-style: normal;
+    font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold);
+  }
+
+  .st-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .st-table caption {
+    text-align: left; font-family: var(--serif); font-size: 19px; font-weight: 500;
+    padding-bottom: 10px;
+  }
+  .st-table th {
+    text-align: left; font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500; padding: 8px 14px 8px 0;
+    border-bottom: 1px solid var(--gold);
+  }
+  .st-table td { padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  .st-table td.n { color: var(--gold); font-family: var(--serif); font-style: italic; font-size: 17px; text-align: right; width: 46px; white-space: nowrap; }
+  .st-table td.dim { color: var(--muted); }
+  .st-table td.tag-c { width: 90px; }
+  .st-table .tag {
+    font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--gold); white-space: nowrap;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips-label {
+    font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; display: block;
+  }
+  .chip {
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 14px; font-size: 12.5px; background: #171310;
+  }
+  .chip.gold { color: var(--gold); border-color: rgba(200,162,76,.4); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 820px) { .split { grid-template-columns: 1fr; } }
+
   /* ===== STATS ===== */
   .stats {
     display: grid; grid-template-columns: repeat(4, 1fr);
@@ -457,6 +558,7 @@
   <a class="brand" href="#top">Divyang Desai</a>
   <div class="links">
     <a href="#work">Work</a>
+    <a href="#strategy">Strategy</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
@@ -467,11 +569,11 @@
 
   <!-- HERO -->
   <section class="hero">
-    <p class="eyebrow reveal in">Copywriter — Toronto, Canada</p>
+    <p class="eyebrow reveal in">Copywriter &amp; Creative Strategist — Toronto, Canada</p>
     <h1 id="name" aria-label="Divyang Desai">Divyang Desai</h1>
     <p class="writes">
       <span>I write</span>
-      <span class="rot" id="rot" aria-label="ads, hooks, essays, newsletters"></span>
+      <span class="rot" id="rot" aria-label="ads, hooks, essays, newsletters, briefs"></span>
       <span>people actually read.</span>
     </p>
     <svg class="ink-stroke" viewBox="0 0 340 14" aria-hidden="true">
@@ -485,9 +587,14 @@
 <div class="marquee" aria-hidden="true">
   <div class="track" id="mq-track">
     <div class="set">
-      <span>Direct Response</span><i>&#10038;</i><span><em>Long-Form</em></span><i>&#10038;</i>
+      <span>Direct Response</span><i>&#10038;</i><span><em>Creative Strategy</em></span><i>&#10038;</i>
       <span>Newsletters</span><i>&#10038;</i><span><em>Short-Form</em></span><i>&#10038;</i>
-      <span>Hooks</span><i>&#10038;</i><span><em>Landing Pages</em></span><i>&#10038;</i>
+      <span>Hooks</span><i>&#10038;</i><span><em>Long-Form</em></span><i>&#10038;</i>
+    </div>
+    <div class="set">
+      <span>Direct Response</span><i>&#10038;</i><span><em>Creative Strategy</em></span><i>&#10038;</i>
+      <span>Newsletters</span><i>&#10038;</i><span><em>Short-Form</em></span><i>&#10038;</i>
+      <span>Hooks</span><i>&#10038;</i><span><em>Long-Form</em></span><i>&#10038;</i>
     </div>
   </div>
 </div>
@@ -498,6 +605,24 @@
   <section id="work" aria-label="Selected work">
     <h2 class="sec-head"><span class="fill" data-fill>Selected Work</span><span class="count">(04)</span></h2>
     <div id="rows"></div>
+  </section>
+
+  <!-- CREATIVE STRATEGY -->
+  <section id="strategy" aria-label="Creative strategy">
+    <h2 class="sec-head"><span class="fill" data-fill>Creative Strategy</span></h2>
+    <button type="button" class="strategy-card reveal" id="strategy-open"
+            aria-label="Open case study: Respire — an end-to-end creative strategy system">
+      <span class="sc-kicker">Featured system — one campaign, end to end</span>
+      <span class="sc-brand">Respire <em>&mdash; mouth tape, Australia</em></span>
+      <span class="sc-desc">From Reddit threads to a shoot-ready script: voice-of-customer research in the buyer&rsquo;s own words, a grid of angles worth testing, the brief, and production documents a creator can film without me in the room.</span>
+      <span class="sc-stages" aria-hidden="true">
+        <span><i>01</i> IVOC Research</span><span class="sep">&#8594;</span>
+        <span><i>02</i> Content Grid</span><span class="sep">&#8594;</span>
+        <span><i>03</i> The Brief</span><span class="sep">&#8594;</span>
+        <span><i>04</i> Script &amp; Footage</span>
+      </span>
+      <span class="sc-cta">Walk through the system <span class="arr" aria-hidden="true">&#8594;</span></span>
+    </button>
   </section>
 
   <!-- STATS -->
@@ -512,7 +637,7 @@
   <section id="about" class="manifesto" aria-label="About">
     <h2 class="sec-head"><span class="fill" data-fill>How I write</span></h2>
     <p class="reveal">Clear beats clever. Specific beats loud. And nothing sells like the reader&rsquo;s own objection — <em>answered.</em></p>
-    <p class="who reveal" data-d="1">I studied software, then chose sentences. Now I write direct-response ads, long-form essays, and newsletters — words with a job to do. Based in Toronto, open to opportunities.</p>
+    <p class="who reveal" data-d="1">I studied software, then chose sentences. Now I write direct-response ads, essays, and newsletters — and build the creative-strategy systems that decide what gets made: research, testing grids, briefs, scripts. Based in Toronto, open to opportunities.</p>
   </section>
 </div>
 
@@ -648,7 +773,7 @@
 
   /* ===== Rotating word ===== */
   (function () {
-    const words = ['ads', 'hooks', 'essays', 'newsletters'];
+    const words = ['ads', 'hooks', 'essays', 'newsletters', 'briefs'];
     const rot = document.getElementById('rot');
     words.forEach((w, i) => {
       const s = document.createElement('span');
@@ -859,6 +984,7 @@
 
   function renderProject(idx) {
     const p = projects[idx];
+    lbBack.textContent = '← All Work';
     lbTitle.textContent = p.title;
     lbCat.textContent = `${p.cat} — ${p.count}`;
     document.getElementById('lb-desc').textContent = p.desc || '';
@@ -905,7 +1031,165 @@
     }
   }
 
+  /* ===== Creative strategy page (staged system walkthrough) ===== */
+  const STRATEGY_HTML = `
+    <section class="stage">
+      <div class="stage-head"><span class="stage-no">01</span><h3 class="stage-title">Voice-of-Customer Research</h3></div>
+      <p class="stage-intro">Before a single line of copy: hundreds of Reddit, YouTube, and Facebook comments, sorted into desires, beliefs, identities, and the exact words buyers use — every theme counted and ranked so the loudest problems get written about first.</p>
+      <div class="stage-body">
+        <div class="quote-grid">
+          <blockquote class="quote">&ldquo;I think I ate my tape yesterday&rdquo;<small>Funny mishap</small></blockquote>
+          <blockquote class="quote">&ldquo;My snoring was literally waking MYSELF up almost every hour. First night taping I slept 6 hours straight.&rdquo;<small>First-night proof</small></blockquote>
+          <blockquote class="quote">&ldquo;What's a good tape to use that's not hostage or night lips, also beard friendly&rdquo;<small>The shopper</small></blockquote>
+          <blockquote class="quote">&ldquo;My freight train snoring has stopped me from group activities if shared accommodation was involved&rdquo;<small>The social cost</small></blockquote>
+          <blockquote class="quote">&ldquo;IF YOU ARE READING THIS COMMENT I BEG YOU TO TRY MOUTH TAPING.&rdquo;<small>The evangelist</small></blockquote>
+          <blockquote class="quote">&ldquo;Mouth tape helped me to start having dreams again&rdquo;<small>Unexpected benefit</small></blockquote>
+        </div>
+        <div class="split">
+          <table class="st-table">
+            <caption>What they want — ranked</caption>
+            <tbody>
+              <tr><td>Sleep through the night, wake refreshed</td><td class="n">8</td></tr>
+              <tr><td>Stop snoring, stop disturbing others</td><td class="n">4</td></tr>
+              <tr><td>Tape that actually stays on all night</td><td class="n">3</td></tr>
+              <tr><td>Beard-friendly tape</td><td class="n">2</td></tr>
+              <tr><td>Affordable — not overpriced branded boxes</td><td class="n">2</td></tr>
+              <tr><td>Alternative to chinstraps and bulky CPAP gear</td><td class="n">2</td></tr>
+              <tr><td>Something that works after &ldquo;trying everything&rdquo;</td><td class="n">2</td></tr>
+            </tbody>
+          </table>
+          <div>
+            <span class="chips-label">Their language, borrowed for the copy</span>
+            <div class="chips">
+              <span class="chip">&ldquo;freight train snoring&rdquo;</span>
+              <span class="chip">underrated biohack</span>
+              <span class="chip">&ldquo;no turning back&rdquo;</span>
+              <span class="chip">CPAP / APAP</span>
+              <span class="chip">mewing</span>
+              <span class="chip">counting &ldquo;first nights&rdquo; as milestones</span>
+              <span class="chip">ALL-CAPS stakes: &ldquo;NOTHING WORKED&rdquo;</span>
+              <span class="chip">nitric oxide</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage-links"><a href="respire/01-ivoc-research.pdf" target="_blank" rel="noopener">Full IVOC document &#8599;</a></div>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="stage-head"><span class="stage-no">02</span><h3 class="stage-title">The Content Grid</h3></div>
+      <p class="stage-intro">The research compresses into a testing matrix: every angle worth money crossed against every format that could carry it. One grid, dozens of testable ads — prioritised before anything gets produced.</p>
+      <div class="stage-body">
+        <div class="split">
+          <table class="st-table">
+            <caption>Angles</caption>
+            <tbody>
+              <tr><td class="dim">Problems &amp; pains</td><td>Snoring &middot; mouth&nbsp;breathing = fight-or-flight &middot; morning depression &middot; &ldquo;my partner hates sharing a bed with me&rdquo; &middot; other tapes come off from saliva</td></tr>
+              <tr><td class="dim">Desired outcomes</td><td>Enhanced REM &middot; productivity after a perfect sleep &middot; sharper facial features &middot; no more 3-hour afternoon naps</td></tr>
+              <tr><td class="dim">Facts &amp; benefits</td><td>61% of Americans mouth-breathe &middot; nitric-oxide utilisation &middot; enhances CPAP treatment &middot; athletes nose-breathe</td></tr>
+              <tr><td class="dim">Offer</td><td>$0.61 a night &middot; 30-day guarantee &middot; beard friendly &middot; toxin-free adhesive &middot; lip-shaped</td></tr>
+            </tbody>
+          </table>
+          <div>
+            <span class="chips-label">Formats to carry them</span>
+            <div class="chips">
+              <span class="chip gold">My Journey overlay</span>
+              <span class="chip gold">How I did X with Y</span>
+              <span class="chip gold">Expos&eacute;</span>
+              <span class="chip gold">Call-out w/ B-roll</span>
+              <span class="chip gold">Versus</span>
+              <span class="chip gold">UGC problem / solution</span>
+              <span class="chip">iPhone Notes static</span>
+              <span class="chip">Meme w/ product</span>
+              <span class="chip">Testimonial w/ product</span>
+              <span class="chip">Versus w/ bullets</span>
+              <span class="chip">Facebook announcement</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage-links"><a href="respire/02-content-grid.pdf" target="_blank" rel="noopener">Full content grid &#8599;</a></div>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="stage-head"><span class="stage-no">03</span><h3 class="stage-title">The Brief</h3></div>
+      <p class="stage-intro">One cell of the grid — idea: <em>Morning Depression</em>, format: UGC problem/solution — becomes a brief tight enough that any creator shoots it the same way. Three hooks, split-tested; the body and close stay constant.</p>
+      <div class="stage-body">
+        <table class="st-table">
+          <tbody>
+            <tr><td class="dim">Offer</td><td>Respire mouth tape — one strip = $0.61</td></tr>
+            <tr><td class="dim">Idea</td><td>&ldquo;It's not Monday Blues, it's Morning Depression&rdquo;</td></tr>
+            <tr><td class="dim">Style</td><td>UGC problem / solution &middot; three intrigue-hook variants</td></tr>
+            <tr><td class="dim">Direction</td><td>The creator's voice should have a crack, as if they just woke up — but a smile, because they finally slept.</td></tr>
+          </tbody>
+        </table>
+        <div class="quote-grid">
+          <blockquote class="quote">&ldquo;It's not Monday Blues, it is &lsquo;Morning Depression&rsquo;. This happens because of absolutely horrible sleep.&rdquo;<small>Hook 1 — problem naming</small></blockquote>
+          <blockquote class="quote">&ldquo;This little strip &mdash; mouth tape &mdash; is the greatest human invention after steam engines! At least for me&hellip;&rdquo;<small>Hook 2 — absurd claim</small></blockquote>
+          <blockquote class="quote">&ldquo;Doctor Andrew Huberman&hellip; I think you just changed my life forever.&rdquo;<small>Hook 3 — authority borrow</small></blockquote>
+        </div>
+        <div class="stage-links"><a href="respire/03-full-brief.pdf" target="_blank" rel="noopener">Full brief &#8599;</a></div>
+      </div>
+    </section>
+
+    <section class="stage">
+      <div class="stage-head"><span class="stage-no">04</span><h3 class="stage-title">Script &amp; Footage</h3></div>
+      <p class="stage-intro">The brief breaks down line by line — copy, camera direction, and the footage type each beat needs — plus a sourced stock-footage plan with links and production notes. A creator can film this without me in the room.</p>
+      <div class="stage-body">
+        <table class="st-table">
+          <caption>Script breakdown — excerpt</caption>
+          <thead><tr><th>Copy</th><th>Direction</th><th>Footage</th></tr></thead>
+          <tbody>
+            <tr><td>&ldquo;I just woke up. Do you see this smile!&rdquo;</td><td class="dim">Getting out of bed, handheld movement</td><td class="tag-c"><span class="tag">Outcome</span></td></tr>
+            <tr><td>&ldquo;I taped my mouth shut before sleeping last night.&rdquo;</td><td class="dim">Talking to the mirror, POV flips to back camera</td><td class="tag-c"><span class="tag">Demo</span></td></tr>
+            <tr><td>&ldquo;Here's my sleep score from last night vs a week ago — 79 to 86.&rdquo;</td><td class="dim">Oura-ring interface screenshots</td><td class="tag-c"><span class="tag">Proof</span></td></tr>
+            <tr><td>&ldquo;Maybe you're just sixty-one cents away from sleeping like a child.&rdquo;</td><td class="dim">Back to the selfie camera</td><td class="tag-c"><span class="tag">Close</span></td></tr>
+          </tbody>
+        </table>
+        <table class="st-table">
+          <caption>Stock-footage plan — excerpt (&ldquo;Facial Features&rdquo; call-out w/ B-roll)</caption>
+          <thead><tr><th>Voiceover</th><th>Sourced footage</th></tr></thead>
+          <tbody>
+            <tr><td>&ldquo;400 years ago, people looked like this&hellip; a jawline visible from Mars.&rdquo;</td><td class="dim">Greek plaster head, closeup &middot; upbeat Greek-vibe BGM</td></tr>
+            <tr><td>&ldquo;But today, around 60% of Americans are mouth breathers.&rdquo;</td><td class="dim">Backlit crowd silhouette &middot; the &ldquo;60%&rdquo; lands in red</td></tr>
+            <tr><td>&ldquo;Solution? Simply tape your mouth shut&hellip;&rdquo;</td><td class="dim">Woman pressing tape on in a dark bedroom &middot; reassuring BGM</td></tr>
+          </tbody>
+        </table>
+        <div class="stage-links">
+          <a href="respire/04-script-breakdown.pdf" target="_blank" rel="noopener">Script breakdown &#8599;</a>
+          <a href="respire/05-stock-footage-plan.pdf" target="_blank" rel="noopener">Stock-footage plan &#8599;</a>
+        </div>
+      </div>
+    </section>`;
+
+  function renderStrategy() {
+    lbTitle.textContent = 'Respire';
+    lbCat.textContent = 'Creative Strategy — Research → Grid → Brief → Production';
+    document.getElementById('lb-desc').textContent =
+      'Respire sells mouth tape in Australia. This is one campaign run end to end through my system: research in the customer’s own words, a grid of angles worth testing, a brief with split-test hooks, and shoot-ready production docs.';
+    lbGallery.className = 'lb-gallery';
+    lbGallery.innerHTML = STRATEGY_HTML;
+    lbLinks.innerHTML = '';
+    lbBack.textContent = '← Home';
+    lbNext.href = '#/work/' + projects[0].slug;
+    lbNextTitle.textContent = projects[0].title;
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.lb-body').scrollTop = 0;
+    document.title = 'Creative Strategy: Respire — Divyang Desai';
+    openIdx = -1;
+    lbClose.focus();
+  }
+
+  document.getElementById('strategy-open').addEventListener('click', function () {
+    lastFocused = this;
+    openedViaClick = true;
+    location.hash = '#/strategy/respire';
+  });
+
   function applyRoute() {
+    if (/^#\/strategy\/respire/.test(location.hash)) { renderStrategy(); return; }
     const m = location.hash.match(/^#\/work\/([a-z0-9-]+)/);
     const idx = m ? projects.findIndex(p => p.slug === m[1]) : -1;
     if (idx >= 0) renderProject(idx);
